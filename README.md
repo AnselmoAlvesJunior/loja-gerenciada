@@ -1,7 +1,6 @@
 # loja_gerenciada
 
-A new Flutter project.
-
+Projeto para gerenciamento de loja utilizando blocs e validators, com streams, streamTransformers entre outros componentes de gerenciamento de estado 
 ## Getting Started
 
 This project is a starting point for a Flutter application.
