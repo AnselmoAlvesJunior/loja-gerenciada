@@ -1,21 +1,31 @@
+import 'package:bloc_pattern/bloc_pattern.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:loja_gerenciada/screens/login_screen.dart';
 
-void main() {
-  runApp(const MyApp());
+import 'blocs/login_bloc.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp();
+  runApp( MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home:  LoginScreen(),
+    return BlocProvider(
+        blocs: [Bloc((i) => LoginBloc())],
+        child:
+        MaterialApp(
+          title: 'Flutter Demo',
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+          ),
+          home:  LoginScreen(),
+        )
     );
   }
 }
