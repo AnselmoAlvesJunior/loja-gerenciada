@@ -1,7 +1,19 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
+import 'order_header.dart';
+
 class OrderTile extends StatelessWidget {
+
+  final DocumentSnapshot order;
+
+  final states = [
+    "", "Em Preparação", "Em Transporte", "Aguardando Entrega", "Entregue"
+  ];
+
+  OrderTile(this.order);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -9,7 +21,7 @@ class OrderTile extends StatelessWidget {
       child: Card(
         child: ExpansionTile(
           title: Text(
-            "#12234 - Entregue",
+            "#${order.id.substring(order.id.length - 7, order.id.length)} -" "${states[order["status"]]}",
             style: TextStyle(color: Colors.green),
           ),
           children: [
@@ -18,19 +30,19 @@ class OrderTile extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  OrderHeader(),
                   Column(
                     mainAxisSize: MainAxisSize.min,
-                    children: [
-                      ListTile(
-                        title: Text("Camiseta Preta P"),
-                        subtitle: Text("Camisetas/129182981"),
-                        trailing: Text(
-                          "2",
-                          style: TextStyle(fontSize: 20),
+                    children: order["products"].map((p){
+                      return ListTile(
+                        title: Text(p["products"]["title"] + " " + p["size"]),
+                        subtitle: Text(p["category"] + "/" + p["pid"]),
+                        trailing: Text(p["quantity"].toString(),
+                        style: TextStyle(fontSize: 20),
                         ),
                         contentPadding: EdgeInsets.zero,
-                      )
-                    ],
+                        );
+                      }).toList(),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -57,8 +69,7 @@ class OrderTile extends StatelessWidget {
                   )
                 ],
               ),
-            ),
-          ],
+            )],
         ),
       ),
     );

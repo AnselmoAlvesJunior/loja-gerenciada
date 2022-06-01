@@ -1,5 +1,6 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:flutter/material.dart';
+import '../blocs/orders_bloc.dart';
 
 import '../blocs/user_bloc.dart';
 import '../tabs/orders_tab.dart';
@@ -19,12 +20,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
   UserBloc _userBloc;
 
+  OrdersBloc _ordersBloc;
+
   @override
   void initState() {
     super.initState();
 
     _pageController = PageController();
     _userBloc = UserBloc();
+    _ordersBloc= OrdersBloc();
   }
 
 
@@ -77,18 +81,22 @@ class _HomeScreenState extends State<HomeScreen> {
            child: BlocProvider(
              blocs: [Bloc((i) => _userBloc)],
              dependencies: [],
-             child: PageView(
-               controller: _pageController,
-               onPageChanged: (p){
-                 setState(() {
-                   _page = p;
-                 });
-               },
-               children: [
-                 UserTabs(),
-                 OrdersTab(),
-                 Container(color: Colors.purple,),
-               ],
+             child: BlocProvider(
+               blocs: [Bloc((i) => _ordersBloc)],
+               dependencies: [],
+               child: PageView(
+                 controller: _pageController,
+                 onPageChanged: (p){
+                   setState(() {
+                     _page = p;
+                   });
+                 },
+                 children: [
+                   UserTabs(),
+                   OrdersTab(),
+                   Container(color: Colors.purple,),
+                 ],
+               ),
              ),
            ),
          ),
